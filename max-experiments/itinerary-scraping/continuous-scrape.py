@@ -95,7 +95,7 @@ def get_itinerary(start_loc="4.8838;45.7475", end_loc="4.8852;45.7581", modes_tr
 
 def generate_random_coordinates():
     min_lat, max_lat = 45.8092, 45.7155
-    min_lon, max_lon = 4.7951, 4.8890
+    min_lon, max_lon = 4.7951, 4.9200
     lat = random.uniform(min_lat, max_lat)
     lon = random.uniform(min_lon, max_lon)
     return f"{round(lon, 4)};{round(lat, 4)}"
