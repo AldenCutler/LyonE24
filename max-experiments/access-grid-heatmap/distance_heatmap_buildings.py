@@ -30,26 +30,24 @@ overpass_url = "http://overpass-api.de/api/interpreter"
 overpass_query = f"""
 [out:json];
 (
-  way["building"]({miny},{minx},{maxy},{maxx});
+  way["building"="residential"]({miny},{minx},{maxy},{maxx});
+  way["building"="apartments"]({miny},{minx},{maxy},{maxx});
+  way["building"="house"]({miny},{minx},{maxy},{maxx});
+  way["building"="detached"]({miny},{minx},{maxy},{maxx});
+  way["building"="terrace"]({miny},{minx},{maxy},{maxx});
+  way["building"="semidetached_house"]({miny},{minx},{maxy},{maxx});
+  way["building"="bungalow"]({miny},{minx},{maxy},{maxx});
+  way["building"="static_caravan"]({miny},{minx},{maxy},{maxx});
 );
 out body;
 >;
 out skel qt;
 """
 
-if not os.path.exists('./cache/overpass-lyon-buildings.json'):
-    # Fetch data from Overpass API
-    print("Caching OSM response")
-    response = requests.get(overpass_url, params={'data': overpass_query})
-    data = response.json()
-    
-    with open('./cache/overpass-lyon-buildings.json', 'w+') as f:
-        f.write(json.dumps(data, indent=1))
-        f.close()
-else:
-    print("Using cached OSM response")
-    with open('./cache/overpass-lyon-buildings.json', 'r') as f:
-        data = json.loads(f.read())
+# Fetch data from Overpass API
+response = requests.get(overpass_url, params={'data': overpass_query})
+data = response.json()
+
 
 buildings_coords = []
 
