@@ -1,0 +1,10 @@
+lyon
+paris
+tokyo
+boston
+seattle
+london
+new york
+nyc
+berlin
+prague
