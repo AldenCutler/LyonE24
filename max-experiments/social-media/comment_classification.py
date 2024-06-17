@@ -67,7 +67,7 @@ def classify_comments(input_filename, output_filename):
                 
                 row['location'] = location_comment
                 
-                if row['about_other_prob'] == float(scores[1]) > 0.3:
+                if float(scores[1]) > 0.3:
                     continue
 
                 writer.writerow(row)
