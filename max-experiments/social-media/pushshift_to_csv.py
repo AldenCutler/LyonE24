@@ -49,10 +49,11 @@ def export_to_csv(input_filename, output_filename):
 
     model_name = "distilbert-base-uncased-finetuned-sst-2-english"
     sentiment_pipeline = pipeline("sentiment-analysis", model=model_name)
+    topic_classifier = pipeline("zero-shot-classification")
     tokenizer = DistilBertTokenizer.from_pretrained(model_name)
 
     with open(input_filename, 'r') as infile, open(output_filename, 'w', newline='') as csvfile:
-        fieldnames = ['link_id', 'subreddit', 'ups', 'downs', 'num_keywords', 'sentiment_label', 'sentiment_score', 'body']
+        fieldnames = ['link_id', 'subreddit', 'ups', 'downs', 'num_keywords', 'sentiment_label', 'sentiment_score', 'about_other_prob', 'about_transit_prob', 'about_transit_quality_prob','body']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
@@ -70,8 +71,24 @@ def export_to_csv(input_filename, output_filename):
                     truncated_body = tokenizer.decode(tokens, clean_up_tokenization_spaces=True)
 
                     sentiment_result = sentiment_pipeline(truncated_body)[0]
+                    
                     result['sentiment_label'] = sentiment_result['label']
                     result['sentiment_score'] = sentiment_result['score']
+
+                    # tell if it is about the quality of public transit
+                    labels = ["the quality of public transit", "public transit in general", "other"]
+                    
+                    result_classify = topic_classifier(body, labels)
+                    
+                    
+                    scores = result_classify['scores'] # {'sequence': [input text], 'labels': ['other', 'quality of public transit', 'talking about public transit'], 'scores': [0.4444258511066437, 0.2889948785305023, 0.266579270362854]}
+                    
+                    result['about_transit_quality_prob'] = float(scores[0])
+                    result['about_transit_prob'] = float(scores[1])
+                    result['about_other_prob'] = float(scores[2])
+
+
+
                     writer.writerow(result)
                     num_keyword_comments += 1
 
