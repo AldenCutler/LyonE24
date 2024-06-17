@@ -8,7 +8,72 @@ tram
 transport
 subway
 commuter
-public transportation
+transportation
 light rail
 station
 commuter rail
+urbain
+transit
+transport
+métro
+train
+bus
+tramway
+métro
+banlieue
+transport
+tramway léger
+gare
+rer
+städtisch
+transit
+transport
+u-bahn
+zug
+bus
+straßenbahn
+u-bahn
+pendler
+verkehr
+leichtbahn
+bahnhof
+s-bahn
+urbano
+tránsito
+transporte
+metro
+tren
+autobús
+tranvía
+metro
+cercanías
+transporte
+tren ligero
+estación
+cercanías
+urbano
+transito
+trasporto
+metro
+treno
+autobus
+tram
+metropolitana
+pendolare
+trasporto
+tram leggero
+stazione
+treno pendolare
+stedelijk
+transit
+vervoer
+metro
+trein
+bus
+tram
+metro
+forens
+vervoer
+lightrail
+station
+forensentrein
