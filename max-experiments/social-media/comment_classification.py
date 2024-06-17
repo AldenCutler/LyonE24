@@ -58,16 +58,20 @@ def classify_comments(input_filename, output_filename):
                 row['sentiment_score'] = sentiment_result['score']
 
                 # Tell if it is about public transit or not
-                labels = ["comment with topic of transit", "comment not focusing on transit that mentions transit"]
+                labels = ["this comment makes a statement on the quality of a public transit system", "this comment does not make statements about the quality of the public transit system mentioned", "this comment is not about transit or only briefly mentions transit"]
                 result_classify = topic_classifier(body, labels)
                 scores = result_classify['scores']
 
                 row['about_transit_prob'] = float(scores[0])
                 row['about_other_prob'] = float(scores[1])
+                about_not_transit = float(scores[2])
                 
                 row['location'] = location_comment
                 
-                if float(scores[1]) > 0.3:
+                if about_not_transit > 0.2:
+                    continue
+                
+                if row['about_transit_prob'] < 0.7:
                     continue
 
                 writer.writerow(row)
