@@ -117,7 +117,7 @@ buildings_within_arrondissements = compute_closest_stations(
 
 # Filter out the lowest 60% of distance points
 distances = [building[2] for building in buildings_within_arrondissements]
-threshold = np.percentile(distances, 60)
+threshold = np.percentile(distances, 80)
 filtered_buildings_coords = [building for building in buildings_within_arrondissements if building[2] > threshold]
 
 # Create the base map centered on Lyon
@@ -141,20 +141,20 @@ folium.GeoJson(
 # Add the filtered heatmap to the map
 HeatMap([[building[0], building[1], building[2]] for building in filtered_buildings_coords]).add_to(m)
 
-stops_within_arrondissements = gpd.sjoin(stops, arrondissements, how='inner', op='within')
-folium.GeoJson(
-    stops_within_arrondissements,
-    name='geojson',
-).add_to(m)
+# stops_within_arrondissements = gpd.sjoin(stops, arrondissements, how='inner', op='within')
+# folium.GeoJson(
+#     stops_within_arrondissements,
+#     name='geojson',
+# ).add_to(m)
 
 # Save the map
-m.save('out/lyon_stops_distance_heatmap.html')
+m.save('out/lyon_stops_distance_heatmap_no_markers.html')
 
 
 
 
 
-do_csv = True
+do_csv = False
 
 if do_csv:
     # Create the CSV file
