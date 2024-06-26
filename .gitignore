@@ -1,4 +1,6 @@
 *reddit*.csv
+journeys*.csv
+distance*.csv
 
 *.bin
 *.build
