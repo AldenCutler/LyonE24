@@ -9,9 +9,16 @@ import pandas as pd
 import math
 from scipy.spatial import KDTree
 
-def generate_building_heatmap(percentile_distances=90, residential=True, show_arrondissements=True, show_metro_lines=False, show_bus_lines=False, show_tram_lines=False, show_funicular_lines=False, export_csv=False, show_stops=False, filename='lyon_stops_distance_heatmap_no_markers.html'):
+def generate_building_heatmap(percentile_distances=99, residential=True, show_arrondissements=True, show_metro_lines=False, show_bus_lines=False, show_tram_lines=False, show_funicular_lines=False, export_csv=False, show_stops=False, filename='lyon_stops_distance_heatmap_no_markers.html', show_iris=False):
     # Load GeoJSON data
-    arrondissements = gpd.read_file('data/arrondissements-lyon.geojson')
+    if show_arrondissements:
+        print("Using Arrondissements Regions")
+        arrondissements = gpd.read_file('data/arrondissements-lyon.geojson')
+        
+    if show_iris:
+        print("Using IRIS Regions")
+        arrondissements = gpd.read_file('data/IRIS.geojson')
+        
     stops = gpd.read_file('data/stops.geojson')
 
     # Ensure both GeoDataFrames have the same CRS
@@ -131,12 +138,12 @@ def generate_building_heatmap(percentile_distances=90, residential=True, show_ar
 
     # Filter out the lowest N% of distance points
     distances = [building[2] for building in buildings_within_arrondissements]
-    threshold = np.percentile(distances, 95)
+    threshold = np.percentile(distances, percentile_distances)
     print(f"Showing buildings over {threshold} meters from closest station.")
     filtered_buildings_coords = [building for building in buildings_within_arrondissements if building[2] > threshold]
     print(len(filtered_buildings_coords))
     # Create the base map centered on Lyon
-    m = folium.Map(location=[(miny + maxy) / 2, (minx + maxx) / 2], zoom_start=13)
+    m = folium.Map(location=[(miny + maxy) / 2, (minx + maxx) / 2], zoom_start=11)
 
 
 
@@ -182,20 +189,21 @@ def generate_building_heatmap(percentile_distances=90, residential=True, show_ar
     if show_bus_lines:
         folium.GeoJson(tcl_bus, style=bus_style).add_to(m)
 
-    # Add the regions to the map with the style column
-    arrondissements['style'] = [{
-        "fillColor": 'black',  # color for the region
-        "color": "black",
-        "weight": 2,
-        "fillOpacity": 0  # opacity for the region
-    } for _ in range(len(arrondissements))]
+    if show_arrondissements:
+        # Add the regions to the map with the style column
+        arrondissements['style'] = [{
+            "fillColor": 'black',  # color for the region
+            "color": "black",
+            "weight": 2,
+            "fillOpacity": 0  # opacity for the region
+        } for _ in range(len(arrondissements))]
 
-    folium.GeoJson(
-        arrondissements,
-        name='geojson',
-        style_function=lambda x: x['properties']['style'],
-        tooltip=folium.GeoJsonTooltip(fields=[], aliases=[])
-    ).add_to(m)
+        folium.GeoJson(
+            arrondissements,
+            name='geojson',
+            style_function=lambda x: x['properties']['style'],
+            tooltip=folium.GeoJsonTooltip(fields=[], aliases=[])
+        ).add_to(m)
 
     # Add the filtered heatmap to the map
     HeatMap([[building[0], building[1], building[2]] for building in filtered_buildings_coords]).add_to(m)
@@ -207,7 +215,7 @@ def generate_building_heatmap(percentile_distances=90, residential=True, show_ar
                 location=[row.geometry.y, row.geometry.x],
                 color='purple',
                 num_sides=3,
-                radius=3
+                radius=2
             ).add_to(m)
 
     # Save the map
@@ -215,35 +223,25 @@ def generate_building_heatmap(percentile_distances=90, residential=True, show_ar
 
 
 
-    if export_csv:
-        # Create the CSV file
-        building_data = []
-        i = 0
-        for building in buildings_within_arrondissements:
-            i+=1
-            if i % 5000 == 0:
-                print(f"{round(i/len(buildings_within_arrondissements)*100)}% of building infos written for CSV..")
-            lat, lon, distance, nearest_station = building
-            point = gpd.points_from_xy([lon], [lat], crs=arrondissements.crs)[0]
-            arrondissement = arrondissements[arrondissements.contains(point)].iloc[0]['nom']
-            building_data.append([lat, lon, distance, nearest_station, arrondissement])
 
-        # Convert to DataFrame
-        df = pd.DataFrame(building_data, columns=['lat', 'lon', 'distance', 'nearest_station', 'arrondissement'])
+    if export_csv:
+        # Create a DataFrame from the buildings_within_arrondissements list
+        buildings_df = pd.DataFrame(buildings_within_arrondissements, columns=['lat', 'long', 'distance', 'nearest_station'])
 
         # Save to CSV
-        df.to_csv('out/building_distances.csv', index=False)
+        buildings_df.to_csv('out/building_distances_greater_lyon_region_all_buildings.csv', index=False)
 
 
 if __name__ == "__main__":
-    percentile_distances=90
-    residential=True
-    show_arrondissements=True
+    percentile_distances=99
+    residential=False
+    show_arrondissements=False
     show_metro_lines=False
     show_bus_lines=False
     show_tram_lines=False
     show_funicular_lines=False
-    export_csv=False
+    export_csv=True
     show_stops=True
-    filename='lyon_stops_distance_residential_only_heatmap.html'
-    generate_building_heatmap(percentile_distances=percentile_distances, residential=residential, show_arrondissements=show_arrondissements, show_metro_lines=show_metro_lines, show_bus_lines=show_bus_lines, show_tram_lines=show_tram_lines, show_funicular_lines=show_funicular_lines, export_csv=export_csv, show_stops=show_stops, filename=filename)
+    show_iris=True
+    filename='lyon_stops_distance_region_all_buildings_heatmap.html'
+    generate_building_heatmap(percentile_distances=percentile_distances, residential=residential, show_arrondissements=show_arrondissements, show_metro_lines=show_metro_lines, show_bus_lines=show_bus_lines, show_tram_lines=show_tram_lines, show_funicular_lines=show_funicular_lines, export_csv=export_csv, show_stops=show_stops, filename=filename, show_iris=show_iris)
