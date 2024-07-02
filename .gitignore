@@ -1,6 +1,6 @@
 *reddit*.csv
 journeys*.csv
-distance*.csv
+# distance*.csv
 
 *.bin
 *.build
