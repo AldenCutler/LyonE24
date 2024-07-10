@@ -1,7 +1,0 @@
-folium
-osmnx
-geopy
-geopandas
-folium
-matplotlib
-seaborn
