@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Train! | Maps</title>
+		<link rel="stylesheet" href="../styles.css" />
+	</head>
+	<body>
+		<h1 style="text-align: center">Maps</h1>
+		<p style="text-align: center"><a href="../">(back to main page)</a></p>
+		<div class="intro">
+			<p>
+				This page contains all the interactive maps we created during our
+				investigation of the Lyon public transit system. Click on the links to
+				view the full-size maps. If you would like to look at the code we used
+				to generate this content, it is available on our
+				<a href="https://github.com/AldenCutler/LyonE24">GitHub</a> page.
+			</p>
+		</div>
+
+		<div class="section">
+			<div class="grid">
+				<div class="section-card">
+					<h3>
+						<a href="iris_accessibility_map.html" target="_blank"
+							>Accessibility Map</a
+						>
+					</h3>
+					<p>
+						This interactive Folium map shows the accessibility of the Lyon
+						public transit system. The map is divided into IRIS zones, which
+						come from a
+						<a
+							target="_blank"
+							href="https://data.grandlyon.com/portail/fr/jeux-de-donnees/contours-iris-grande-echelle-metropole-lyon/telechargements"
+							>database</a
+						>
+						managed by the French government, where each zone represents an area
+						of approximately 2000 people. Each region is subsequently colored by
+						the fraction of wheelchair-accessible transit stops within that
+						region.
+					</p>
+					<!-- <p>
+						Overall, Lyon's system is very accessible, with only a single region
+						(Richerland-Petites Soeurs) having a percentage of
+						wheelchair-accessible stops below 50%. This region only covers 8
+						city blocks, yet contains 5 transit stops, 2 of which are
+						wheelchair-accessible.
+					</p> -->
+				</div>
+				<div class="section-card">
+					<h3>
+						<a href="outages_heatmap.html" target="_blank"
+							>Heatmap of Outages</a
+						>
+					</h3>
+					<p>
+						This is an interactive Folium heatmap that shows a heatmap of the
+						number of outages in each area of Lyon. The data was gathered
+						through data scraping of the TCL Itinerary Planner. The heatmap is
+						color-coded, with red indicating a high number of outages and green
+						indicating a low number of outages. The heatmap is interactive, so
+						you can zoom in and out to see more detail. Our data only contains
+						outages in the metro system, so only metro lines are shown on the
+						map.
+					</p>
+				</div>
+				<div class="section-card">
+					<h3>
+						<a
+							href="lyon_stops_distance_all_buildings_heatmap.html"
+							target="_blank"
+							>Heatmap of Distance From All Buildings to Nearest Transit Stop</a
+						>
+					</h3>
+					<p>
+						This is an interactive Folium heatmap that shows the distance from
+						every building in Lyon to the nearest transit stop. Red means the
+						building is farther away from the nearest stop. Purple markers
+						represent transit stops. This uses OpenStreetMap's data on
+						buildings, so it may not be 100% accurate.
+					</p>
+				</div>
+				<div class="section-card">
+					<h3>
+						<a
+							href="lyon_stops_distance_residential_only_heatmap.html"
+							target="_blank"
+							>Heatmap of Distance From Residential Buildings to Nearest
+							Transit</a
+						>
+					</h3>
+					<p>
+						This is an interactive Folium heatmap that shows a heatmap based on
+						the distances from residential buildings to the closest transit
+						station (bus, metro, or tram) Red means the building is farther away
+						from the nearest station. This uses OpenStreetMap's data on
+						residential buildings, so it may not be 100% accurate.
+					</p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
