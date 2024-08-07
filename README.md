@@ -1,5 +1,9 @@
 # LyonE24
 
-Maps URL:
+Public URL:
 
-- <https://public.maxmob.sh/lyon/maps/>
+- <https://aldencutler.github.io/LyonE24/>
+
+Source Code:
+
+- <https://github.com/AldenCutler/LyonE24>
